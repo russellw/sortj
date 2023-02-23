@@ -3,9 +3,9 @@ package sortj;
 import java.util.List;
 
 public final class Sort {
-  List<String> out;
+  List<String> text;
 
-  Sort(List<String> in) {
-    out = in;
+  Sort(List<String> text, int i) {
+    this.text = text;
   }
 }

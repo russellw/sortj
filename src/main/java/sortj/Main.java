@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 
 public final class Main {
   private static boolean inPlace;
@@ -23,7 +24,10 @@ public final class Main {
   private static void sort(String file) throws IOException {
     var path = Path.of(file);
     var in = Files.readAllLines(path, StandardCharsets.UTF_8);
-    var out = new Sort(in).out;
+
+    var out = new ArrayList<>(in);
+    for (var i = out.size(); i-- > 0; ) if (out.get(i).strip().equals("// SORT")) new Sort(out, i);
+
     if (inPlace) {
       Files.move(
           path,
