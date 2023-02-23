@@ -37,22 +37,25 @@ public final class Main {
       }
       return;
     }
-    for (var s : out) System.out.println(s);
+    for (var s : out) {
+      System.out.print(s);
+      System.out.print('\n');
+    }
   }
 
   public static void main(String[] args) throws IOException {
     Option.parse(OPTIONS, args);
     if (Option.positionalArgs.isEmpty()) {
-      System.err.println("Usage: sortj [options] files");
+      System.err.print("Usage: sortj [options] files\n");
       System.exit(1);
     }
     if (Option.positionalArgs.size() > 1 && !inPlace) {
-      System.err.println("Multiple files specified without -i");
+      System.err.print("Multiple files specified without -i\n");
       System.exit(1);
     }
     for (var file : Option.positionalArgs) {
       if (!Etc.ext(file).equals("java")) {
-        System.err.println(file + ": not a Java source file - skipped");
+        System.err.print(file + ": not a Java source file - skipped\n");
         continue;
       }
       sort(file);

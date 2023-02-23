@@ -53,7 +53,7 @@ def do(s):
         if stdout != open(s + "-out.java").read():
             raise Exception(s)
         return
-    open(s + "-out.java", "w", newline="\n").write(s)
+    open(s + "-out.java", "w", newline="\n").write(stdout)
 
 
 for s in inputs:
