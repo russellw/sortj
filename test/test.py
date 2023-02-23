@@ -1,19 +1,9 @@
-import argparse
 import os
 import re
 import subprocess
 import tempfile
 import time
 
-
-parser = argparse.ArgumentParser(description="Run test cases")
-parser.add_argument("-v", "--verbose", action="count", help="increase output verbosity")
-parser.add_argument("files", nargs="*")
-args = parser.parse_args()
-
-verbose = 0
-if args.verbose:
-    verbose = args.verbose
 
 here = os.path.dirname(os.path.realpath(__file__))
 projectDir = os.path.join(here, "..")
@@ -47,8 +37,25 @@ for s in outputs:
 
 def do(s):
     cmd = "java", "-ea", "--enable-preview", "-jar", jar, s + "-in.java"
-    print(cmd)
+    print(" ".join(cmd))
+    p = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    stdout, stderr = p.communicate()
+    stdout = str(stdout, "utf-8")
+    stderr = str(stderr, "utf-8")
+    if p.returncode or stderr:
+        print(stderr, end="")
+        raise Exception(str(p.returncode))
+    if s in outputs:
+        if stdout != open(s + "-out.java").read():
+            raise Exception(s)
+        return
+    open(s + "-out.java", "w", newline="\n").write(s)
 
 
 for s in inputs:
     do(s)
+print("ok")
