@@ -1,9 +1,13 @@
 package sortj;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public final class Main {
   private static boolean inPlace;
@@ -21,8 +25,19 @@ public final class Main {
     var in = Files.readAllLines(path, StandardCharsets.UTF_8);
     var out = new Sort(in).out;
     if (inPlace) {
-      Files.move(path, Path.of(System.getProperty("java.io.tmpdir")));
+      Files.move(
+          path,
+          Path.of(System.getProperty("java.io.tmpdir"), new File(file).getName()),
+          StandardCopyOption.REPLACE_EXISTING);
+      try (var writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
+        for (var s : out) {
+          writer.write(s);
+          writer.write('\n');
+        }
+      }
+      return;
     }
+    for (var s : out) System.out.println(s);
   }
 
   public static void main(String[] args) throws IOException {
