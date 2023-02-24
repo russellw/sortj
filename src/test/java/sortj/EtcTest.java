@@ -11,4 +11,12 @@ public class EtcTest {
         assertEquals(Etc.ext("foo.c"),"c");
         assertEquals(Etc.ext("foo"),"");
     }
+
+    @Test
+    public void indent() {
+        assertEquals(Etc.indent(0, "a"),0);
+        assertEquals(Etc.indent(0, "  a   \t   b"),2);
+        assertThrows(TabException.class,()->Etc.indent(0,"\t"));
+        assertThrows(TabException.class,()->Etc.indent(0,"   \tx"));
+    }
 }

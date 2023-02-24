@@ -73,7 +73,13 @@ public final class Main {
         System.err.print(file + ": not a Java source file - skipped\n");
         continue;
       }
-      sort(file);
+      try {
+        sort(file);
+      } catch (IndentException e) {
+        System.err.printf("%s:%d: confusing indent - skipped\n", file, e.index + 1);
+      } catch (TabException e) {
+        System.err.printf("%s:%d: indented with tab - skipped\n", file, e.index + 1);
+      }
     }
   }
 }
