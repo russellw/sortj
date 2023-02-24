@@ -7,7 +7,7 @@ public final class Element {
   final String[] subtext;
   final String key;
 
-  Element(List<String> text, int dent, int i) {
+  public Element(List<String> text, int dent, int i) {
     // skip leading blank lines
     while (i < text.size() && text.get(i).isBlank()) i++;
 
