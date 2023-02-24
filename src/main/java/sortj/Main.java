@@ -22,17 +22,26 @@ public final class Main {
       };
 
   private static void sort(String file) throws IOException {
+    // read the input text
     var path = Path.of(file);
     var in = Files.readAllLines(path, StandardCharsets.UTF_8);
 
+    // calculate the sorted text
     var out = new ArrayList<>(in);
     for (var i = out.size(); i-- > 0; ) if (out.get(i).strip().equals("// SORT")) new Sort(out, i);
 
+    // write the sorted text
     if (inPlace) {
+      // don't write if nothing has changed
+      if (in.equals(out)) return;
+
+      // keep the original for safety
       Files.move(
           path,
           Path.of(System.getProperty("java.io.tmpdir"), new File(file).getName()),
           StandardCopyOption.REPLACE_EXISTING);
+
+      // write the sorted text
       try (var writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
         for (var s : out) {
           writer.write(s);
@@ -41,6 +50,8 @@ public final class Main {
       }
       return;
     }
+
+    // avoid println to make sure line endings are consistently LF
     for (var s : out) {
       System.out.print(s);
       System.out.print('\n');
