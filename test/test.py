@@ -36,7 +36,7 @@ for s in outputs:
 
 
 def do(s):
-    cmd = "java", "-ea", "--enable-preview", "-jar", jar, s + "-in.java"
+    cmd = "java", "-ea", "-jar", jar, s + "-in.java"
     print(" ".join(cmd))
     p = subprocess.Popen(
         cmd,
