@@ -47,14 +47,14 @@ public class ElementTest {
     text.add("// END");
     e = new Element(text, 0, 0);
     assertEquals(1, e.j);
-    assertArrayEquals(e.subtext, new String[] {"a"});
+    assertArrayEquals(new String[] {"a"}, e.subtext);
 
     text.clear();
     text.add("a");
     text.add("b");
     e = new Element(text, 0, 0);
     assertEquals(1, e.j);
-    assertArrayEquals(e.subtext, new String[] {"a"});
+    assertArrayEquals(new String[] {"a"}, e.subtext);
 
     text.clear();
     text.add("a");
@@ -63,5 +63,21 @@ public class ElementTest {
     e = new Element(text, 0, 0);
     assertEquals(2, e.j);
     assertArrayEquals(new String[] {"a", " b"}, e.subtext);
+
+    text.clear();
+    text.add("a {");
+    text.add(" b");
+    text.add("}");
+    e = new Element(text, 0, 0);
+    assertEquals(3, e.j);
+    assertArrayEquals(new String[] {"a {", " b", "}"}, e.subtext);
+
+    text.clear();
+    text.add(" a");
+    text.add("  b");
+    text.add("}");
+    e = new Element(text, 1, 0);
+    assertEquals(2, e.j);
+    assertArrayEquals(new String[] {" a", "  b"}, e.subtext);
   }
 }
