@@ -8,6 +8,11 @@ public final class Etc {
     System.out.printf("%s: %s\n", Thread.currentThread().getStackTrace()[2], a);
   }
 
+  static boolean reallyStartsWith(List<String> text, int i, String prefix) {
+    if (i == text.size()) return false;
+    return text.get(i).stripLeading().startsWith(prefix);
+  }
+
   static int indent(List<String> text, int i) {
     // End of file is always the end of a block
     if (i == text.size()) return -1;

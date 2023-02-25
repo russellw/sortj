@@ -28,7 +28,8 @@ public final class Main {
 
     // calculate the sorted text
     var out = new ArrayList<>(in);
-    for (var i = out.size(); i-- > 0; ) if (out.get(i).strip().equals("// SORT")) new Sort(out, i);
+    for (var i = out.size(); i-- > 0; )
+      if (Etc.reallyStartsWith(out, i, "// SORT")) new Sort(out, i);
 
     // write the sorted text
     if (inPlace) {
