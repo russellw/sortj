@@ -21,4 +21,9 @@ public final class Etc {
     if (i < 0) return "";
     return file.substring(i + 1);
   }
+
+  static int skipBlanks(List<String> text, int i) {
+    while (i < text.size() && text.get(i).isBlank()) i++;
+    return i;
+  }
 }
