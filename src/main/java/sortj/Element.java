@@ -27,11 +27,11 @@ public final class Element {
 
     // end of section
     if (text.get(i).strip().equals("// END")) {
-      if (Etc.indent(i, text.get(i)) != dent) throw new IndentException(i);
+      if (Etc.indent(text, i) != dent) throw new IndentException(i);
       end = i;
       return;
     }
-    if (Etc.indent(i, text.get(i)) < dent) {
+    if (Etc.indent(text, i) < dent) {
       if (!text.get(i).strip().startsWith("}")) throw new IndentException(i);
       end = i;
       return;

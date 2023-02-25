@@ -2,6 +2,7 @@ package sortj;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import org.junit.Test;
 
 public class EtcTest {
@@ -14,9 +15,9 @@ public class EtcTest {
 
   @Test
   public void indent() {
-    assertEquals(Etc.indent(0, "a"), 0);
-    assertEquals(Etc.indent(0, "  a   \t   b"), 2);
-    assertThrows(TabException.class, () -> Etc.indent(0, "\t"));
-    assertThrows(TabException.class, () -> Etc.indent(0, "   \tx"));
+    assertEquals(Etc.indent(List.of("a"), 0), 0);
+    assertEquals(Etc.indent(List.of("  a   \t   b"), 0), 2);
+    assertThrows(TabException.class, () -> Etc.indent(List.of("\t"), 0));
+    assertThrows(TabException.class, () -> Etc.indent(List.of("   \tx"), 0));
   }
 }
