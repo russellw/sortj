@@ -22,20 +22,8 @@ public final class Element {
     }
 
     // there is still at least one element to read in this block
-    j = Etc.skipBlanks(text, i + 1);
-
-    // it's just one line
-    if (Etc.indent(text, j) <= dent) {
-      // omit trailing blank lines
-      j = i + 1;
-
-      // element text
-      subtext = new String[] {text.get(i)};
-      return;
-    }
-
-    // multiple lines
-    while (Etc.indent(text, j) > dent) j++;
+    do j++;
+    while (Etc.indent(text, j) > dent);
 
     // a closing brace might be part of the element
     if (Etc.indent(text, j) == dent && text.get(j).strip().startsWith("}")) {
