@@ -9,9 +9,17 @@ public final class Etc {
   }
 
   static int indent(List<String> text, int i) {
+    // End of file is always the end of a block
+    if (i == text.size()) return -1;
     var s = text.get(i);
+
+    // in Java, blank line is never the end of a block
+    if (s.isBlank()) return Integer.MAX_VALUE;
+
     var j = 0;
     while (s.charAt(j) == ' ') j++;
+
+    // don't know what indentation a tab character would correspond to
     if (s.charAt(j) == '\t') throw new TabException(i);
     return j;
   }

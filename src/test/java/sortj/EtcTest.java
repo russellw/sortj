@@ -9,34 +9,35 @@ import org.junit.Test;
 public class EtcTest {
   @Test
   public void ext() {
-    assertEquals(Etc.ext("foo.txt"), "txt");
-    assertEquals(Etc.ext("foo.c"), "c");
-    assertEquals(Etc.ext("foo"), "");
+    assertEquals("txt", Etc.ext("foo.txt"));
+    assertEquals("c", Etc.ext("foo.c"));
+    assertEquals("", Etc.ext("foo"));
   }
 
   @Test
   public void indent() {
-    assertEquals(Etc.indent(List.of("a"), 0), 0);
-    assertEquals(Etc.indent(List.of("  a   \t   b"), 0), 2);
-    assertThrows(TabException.class, () -> Etc.indent(List.of("\t"), 0));
+    assertEquals(Integer.MAX_VALUE, Etc.indent(List.of(" "), 0));
+    assertEquals(0, Etc.indent(List.of("a"), 0));
+    assertEquals(2, Etc.indent(List.of("  a   \t   b"), 0));
     assertThrows(TabException.class, () -> Etc.indent(List.of("   \tx"), 0));
+    assertTrue(Etc.indent(List.of(""), 1) < 0);
   }
 
   @Test
   public void skipBlanks() {
     var text = new ArrayList<String>();
-    assertEquals(Etc.skipBlanks(text, 0), 0);
+    assertEquals(0, Etc.skipBlanks(text, 0));
 
     text.add("");
-    assertEquals(Etc.skipBlanks(text, 0), 1);
+    assertEquals(1, Etc.skipBlanks(text, 0));
 
     text.clear();
     text.add(" ");
-    assertEquals(Etc.skipBlanks(text, 0), 1);
+    assertEquals(1, Etc.skipBlanks(text, 0));
 
     text.clear();
     text.add(" ");
     text.add(" x");
-    assertEquals(Etc.skipBlanks(text, 0), 1);
+    assertEquals(1, Etc.skipBlanks(text, 0));
   }
 }
