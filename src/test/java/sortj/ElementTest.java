@@ -145,5 +145,14 @@ public class ElementTest {
     var s = e.key();
     var v = s.split("\t");
     assertEquals("abc", v[0]);
+
+    in =
+        new String[] {
+          "int abc  = def + ghi;",
+        };
+    e = new Element(Arrays.asList(in), 0, 0);
+    s = e.key();
+    v = s.split("\t");
+    assertEquals("abc", v[0]);
   }
 }

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public final class Element {
   private static final Pattern[] PATTERNS =
       new Pattern[] {
-        Pattern.compile(".*\\W+(\\w+) =.*"),
+        Pattern.compile(".*\\W+(\\w+)\\s*=.*"),
         Pattern.compile(".*\\W+(\\w+)\\(.*"),
         Pattern.compile(".*\\W+(\\w+).*"),
       };
