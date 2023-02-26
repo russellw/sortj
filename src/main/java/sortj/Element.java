@@ -13,6 +13,9 @@ public final class Element {
         Pattern.compile(".*\\W+(\\w+).*"),
       };
 
+  // the location of this element in the text
+  final int start;
+
   // the index just after the last line of this element.
   // it is filled in even if there wasn't actually an element to read
   final int end;
@@ -40,13 +43,14 @@ public final class Element {
           return key;
         }
       }
-      throw new SyntaxException(end - subtext.length + i);
+      throw new SyntaxException(start + i);
     }
   }
 
   public Element(List<String> text, int dent, int i) {
     // skip leading blank lines
     i = Etc.skipBlanks(text, i);
+    start = i;
 
     // dedent means end of block
     if (Etc.indent(text, i) < dent) {
