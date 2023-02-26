@@ -10,17 +10,10 @@ public final class Etc {
     System.out.printf("%s: %s\n", Thread.currentThread().getStackTrace()[2], a);
   }
 
-  static <T> List<T> replace(List<T> in, int i, int j, List<T> out) {
-    var v = new ArrayList<T>();
-    for (var k = 0; k < i; k++) v.add(in.get(k));
-    v.addAll(out);
-    for (var k = j; k < in.size(); k++) v.add(in.get(k));
-    return v;
-  }
-
-  static boolean reallyStartsWith(List<String> text, int i, String prefix) {
-    if (i == text.size()) return false;
-    return text.get(i).stripLeading().startsWith(prefix);
+  static String ext(String file) {
+    var i = file.lastIndexOf('.');
+    if (i < 0) return "";
+    return file.substring(i + 1);
   }
 
   static int indent(List<String> text, int i) {
@@ -39,10 +32,17 @@ public final class Etc {
     return j;
   }
 
-  static String ext(String file) {
-    var i = file.lastIndexOf('.');
-    if (i < 0) return "";
-    return file.substring(i + 1);
+  static boolean reallyStartsWith(List<String> text, int i, String prefix) {
+    if (i == text.size()) return false;
+    return text.get(i).stripLeading().startsWith(prefix);
+  }
+
+  static <T> List<T> replace(List<T> in, int i, int j, List<T> out) {
+    var v = new ArrayList<T>();
+    for (var k = 0; k < i; k++) v.add(in.get(k));
+    v.addAll(out);
+    for (var k = j; k < in.size(); k++) v.add(in.get(k));
+    return v;
   }
 
   static int skipBlanks(List<String> text, int i) {
