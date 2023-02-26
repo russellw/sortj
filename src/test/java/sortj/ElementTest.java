@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import org.junit.Test;
 
 public class ElementTest {
@@ -104,5 +105,45 @@ public class ElementTest {
     e = new Element(Arrays.asList(in), 0, 0);
     assertArrayEquals(out, e.subtext);
     assertEquals(out.length, e.j);
+  }
+
+  @Test
+  public void key() {
+    var p = Pattern.compile("a");
+    var m = p.matcher("a");
+    assertTrue(m.matches());
+
+    m = p.matcher("b");
+    assertFalse(m.matches());
+
+    m = p.matcher(" a");
+    assertFalse(m.matches());
+
+    p = Pattern.compile(" (\\w+) ");
+    m = p.matcher(" abc ");
+    assertTrue(m.matches());
+    assertEquals(m.group(0), " abc ");
+    assertEquals(m.group(1), "abc");
+
+    p = Pattern.compile(" (\\w+)");
+    m = p.matcher(" abc ");
+    assertFalse(m.matches());
+
+    p = Pattern.compile(".*\\W+(\\w+).*");
+    m = p.matcher(" abc def ghi;");
+    assertTrue(m.matches());
+    assertEquals(m.group(1), "ghi");
+
+    m = p.matcher("ghi;");
+    assertFalse(m.matches());
+
+    var in =
+        new String[] {
+          "int abc;",
+        };
+    var e = new Element(Arrays.asList(in), 0, 0);
+    var s = e.key();
+    var v = s.split("\t");
+    assertEquals("abc", v[0]);
   }
 }

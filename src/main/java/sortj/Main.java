@@ -78,6 +78,8 @@ public final class Main {
         sort(file);
       } catch (IndentException e) {
         System.err.printf("%s:%d: confusing indent - skipped\n", file, e.index + 1);
+      } catch (SyntaxException e) {
+        System.err.printf("%s:%d: confusing syntax - skipped\n", file, e.index + 1);
       } catch (TabException e) {
         System.err.printf("%s:%d: indented with tab - skipped\n", file, e.index + 1);
       }

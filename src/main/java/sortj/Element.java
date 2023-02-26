@@ -1,8 +1,16 @@
 package sortj;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public final class Element {
+  private static final Pattern[] PATTERNS =
+      new Pattern[] {
+        Pattern.compile(".*\\W+(\\w+) =.*"),
+        Pattern.compile(".*\\W+(\\w+)\\(.*"),
+        Pattern.compile(".*\\W+(\\w+).*"),
+      };
+
   // the index just after the last line of this element.
   // it is filled in even if there wasn't actually an element to read
   int j;
@@ -13,6 +21,26 @@ public final class Element {
   // as soon as the text starts being rearranged.
   // if subtext is null, there wasn't another element to read
   String[] subtext;
+
+  // cache
+  private String key;
+
+  String key() {
+    if (key != null) return key;
+    for (var i = 0; ; i++) {
+      var s = subtext[i];
+      s = s.strip();
+      if (s.startsWith("//") || s.startsWith("@")) continue;
+      for (var p : PATTERNS) {
+        var m = p.matcher(s);
+        if (m.matches()) {
+          key = m.group(1) + '\t' + s;
+          return key;
+        }
+      }
+      throw new SyntaxException(j - subtext.length + i);
+    }
+  }
 
   public Element(List<String> text, int dent, int i) {
     // skip leading blank lines
