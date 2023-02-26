@@ -13,26 +13,26 @@ public class ElementTest {
     var text = new ArrayList<String>();
     var e = new Element(text, 0, 0);
     assertNull(e.subtext);
-    assertEquals(0, e.j);
+    assertEquals(0, e.end);
 
     text.add("// END");
     e = new Element(text, 0, 0);
     assertNull(e.subtext);
-    assertEquals(0, e.j);
+    assertEquals(0, e.end);
 
     text.clear();
     text.add(" ");
     text.add("// END");
     e = new Element(text, 0, 0);
     assertNull(e.subtext);
-    assertEquals(1, e.j);
+    assertEquals(1, e.end);
 
     text.clear();
     text.add(" ");
     text.add("} // closing brace");
     e = new Element(text, 1, 0);
     assertNull(e.subtext);
-    assertEquals(1, e.j);
+    assertEquals(1, e.end);
 
     text.clear();
     text.add(" ");
@@ -48,14 +48,14 @@ public class ElementTest {
     text.add("a");
     text.add("// END");
     e = new Element(text, 0, 0);
-    assertEquals(1, e.j);
+    assertEquals(1, e.end);
     assertArrayEquals(new String[] {"a"}, e.subtext);
 
     text.clear();
     text.add("a");
     text.add("b");
     e = new Element(text, 0, 0);
-    assertEquals(1, e.j);
+    assertEquals(1, e.end);
     assertArrayEquals(new String[] {"a"}, e.subtext);
 
     text.clear();
@@ -63,7 +63,7 @@ public class ElementTest {
     text.add(" b");
     text.add("c");
     e = new Element(text, 0, 0);
-    assertEquals(2, e.j);
+    assertEquals(2, e.end);
     assertArrayEquals(new String[] {"a", " b"}, e.subtext);
 
     text.clear();
@@ -71,7 +71,7 @@ public class ElementTest {
     text.add(" b");
     text.add("}");
     e = new Element(text, 0, 0);
-    assertEquals(3, e.j);
+    assertEquals(3, e.end);
     assertArrayEquals(new String[] {"a {", " b", "}"}, e.subtext);
 
     text.clear();
@@ -79,7 +79,7 @@ public class ElementTest {
     text.add("  b");
     text.add("}");
     e = new Element(text, 1, 0);
-    assertEquals(2, e.j);
+    assertEquals(2, e.end);
     assertArrayEquals(new String[] {" a", "  b"}, e.subtext);
 
     var in =
@@ -92,7 +92,7 @@ public class ElementTest {
         };
     e = new Element(Arrays.asList(in), 0, 0);
     assertArrayEquals(out, e.subtext);
-    assertEquals(out.length, e.j);
+    assertEquals(out.length, e.end);
 
     in =
         new String[] {
@@ -104,7 +104,7 @@ public class ElementTest {
         };
     e = new Element(Arrays.asList(in), 0, 0);
     assertArrayEquals(out, e.subtext);
-    assertEquals(out.length, e.j);
+    assertEquals(out.length, e.end);
   }
 
   @Test

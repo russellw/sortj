@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Main {
   private static boolean inPlace;
@@ -21,6 +22,21 @@ public final class Main {
         },
       };
 
+  private static void sortBlock(List<String> text, int i) {
+    assert Etc.reallyStartsWith(text, i, "// SORT");
+    var dent = Etc.indent(text, i);
+    i++;
+
+    var j = i;
+    var elements = new ArrayList<Element>();
+    for (; ; ) {
+      var e = new Element(text, dent, j);
+      j = e.end;
+      if (e.subtext == null) break;
+      elements.add(e);
+    }
+  }
+
   private static void sort(String file) throws IOException {
     // read the input text
     var path = Path.of(file);
@@ -29,7 +45,7 @@ public final class Main {
     // calculate the sorted text
     var out = new ArrayList<>(in);
     for (var i = out.size(); i-- > 0; )
-      if (Etc.reallyStartsWith(out, i, "// SORT")) new Sort(out, i);
+      if (Etc.reallyStartsWith(out, i, "// SORT")) sortBlock(out, i);
 
     // write the sorted text
     if (inPlace) {

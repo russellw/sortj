@@ -13,7 +13,7 @@ public final class Element {
 
   // the index just after the last line of this element.
   // it is filled in even if there wasn't actually an element to read
-  int j;
+  int end;
 
   // the portion of the text that comprises this element.
   // an array rather than a list, to make sure we don't end up
@@ -38,14 +38,14 @@ public final class Element {
           return key;
         }
       }
-      throw new SyntaxException(j - subtext.length + i);
+      throw new SyntaxException(end - subtext.length + i);
     }
   }
 
   public Element(List<String> text, int dent, int i) {
     // skip leading blank lines
     i = Etc.skipBlanks(text, i);
-    j = i;
+    end = i;
 
     // dedent means end of block
     if (Etc.indent(text, i) < dent) {
@@ -60,6 +60,7 @@ public final class Element {
     }
 
     // leading comments and annotations are part of the element
+    var j = i;
     while (Etc.reallyStartsWith(text, j, "//") || Etc.reallyStartsWith(text, j, "@")) {
       if (Etc.indent(text, j) != dent) throw new IndentException(j);
       j++;
@@ -77,7 +78,8 @@ public final class Element {
       j++;
     }
 
-    // omit trailing blank lines
+    // trailing blank lines are part of the text, but not this element
+    this.end = j;
     while (text.get(j - 1).isBlank()) j--;
 
     // element text
