@@ -1,11 +1,20 @@
 package sortj;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Etc {
   @SuppressWarnings("unused")
   static void dbg(Object a) {
     System.out.printf("%s: %s\n", Thread.currentThread().getStackTrace()[2], a);
+  }
+
+  static <T> List<T> replace(List<T> in, int i, int j, List<T> out) {
+    var v = new ArrayList<T>();
+    for (var k = 0; k < i; k++) v.add(in.get(k));
+    v.addAll(out);
+    for (var k = j; k < in.size(); k++) v.add(in.get(k));
+    return v;
   }
 
   static boolean reallyStartsWith(List<String> text, int i, String prefix) {

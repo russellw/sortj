@@ -40,4 +40,13 @@ public class EtcTest {
     text.add(" x");
     assertEquals(1, Etc.skipBlanks(text, 0));
   }
+
+  @Test
+  public void replace() {
+    var in = List.of("0", "1", "2", "3", "4");
+    var out = List.of("a", "b");
+    assertEquals(List.of("a", "b"), Etc.replace(in, -1, 10, out));
+    assertEquals(List.of("0", "a", "b"), Etc.replace(in, 1, 10, out));
+    assertEquals(List.of("0", "a", "b", "4"), Etc.replace(in, 1, 4, out));
+  }
 }

@@ -1,5 +1,7 @@
 package sortj;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -13,14 +15,14 @@ public final class Element {
 
   // the index just after the last line of this element.
   // it is filled in even if there wasn't actually an element to read
-  int end;
+  final int end;
 
   // the portion of the text that comprises this element.
   // an array rather than a list, to make sure we don't end up
   // with just a view on the original list, which would be invalid
   // as soon as the text starts being rearranged.
   // if subtext is null, there wasn't another element to read
-  String[] subtext;
+  final String[] subtext;
 
   // cache
   private String key;
@@ -45,17 +47,20 @@ public final class Element {
   public Element(List<String> text, int dent, int i) {
     // skip leading blank lines
     i = Etc.skipBlanks(text, i);
-    end = i;
 
     // dedent means end of block
     if (Etc.indent(text, i) < dent) {
       if (i < text.size() && !Etc.reallyStartsWith(text, i, "}")) throw new IndentException(i);
+      end = i;
+      subtext = null;
       return;
     }
 
     // so does explicit end marker
     if (text.get(i).strip().equals("// END")) {
       if (Etc.indent(text, i) != dent) throw new IndentException(i);
+      end = i;
+      subtext = null;
       return;
     }
 
@@ -79,11 +84,17 @@ public final class Element {
     }
 
     // trailing blank lines are part of the text, but not this element
-    this.end = j;
+    end = j;
     while (text.get(j - 1).isBlank()) j--;
 
     // element text
     subtext = new String[j - i];
     for (var k = 0; k < subtext.length; k++) subtext[k] = text.get(i + k);
+  }
+
+  static List<String> cat(List<Element> elements) {
+    var v = new ArrayList<String>();
+    for (var e : elements) Collections.addAll(v, e.subtext);
+    return v;
   }
 }
