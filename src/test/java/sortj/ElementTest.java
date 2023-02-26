@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.junit.Test;
 
@@ -49,14 +50,14 @@ public class ElementTest {
     text.add("// END");
     e = new Element(text, 0, 0);
     assertEquals(1, e.end);
-    assertArrayEquals(new String[] {"a"}, e.subtext);
+    assertEquals(List.of("a"), e.subtext);
 
     text.clear();
     text.add("a");
     text.add("b");
     e = new Element(text, 0, 0);
     assertEquals(1, e.end);
-    assertArrayEquals(new String[] {"a"}, e.subtext);
+    assertEquals(List.of("a"), e.subtext);
 
     text.clear();
     text.add("a");
@@ -64,7 +65,7 @@ public class ElementTest {
     text.add("c");
     e = new Element(text, 0, 0);
     assertEquals(2, e.end);
-    assertArrayEquals(new String[] {"a", " b"}, e.subtext);
+    assertEquals(List.of("a", " b"), e.subtext);
 
     text.clear();
     text.add("a {");
@@ -72,7 +73,7 @@ public class ElementTest {
     text.add("}");
     e = new Element(text, 0, 0);
     assertEquals(3, e.end);
-    assertArrayEquals(new String[] {"a {", " b", "}"}, e.subtext);
+    assertEquals(List.of("a {", " b", "}"), e.subtext);
 
     text.clear();
     text.add(" a");
@@ -80,31 +81,19 @@ public class ElementTest {
     text.add("}");
     e = new Element(text, 1, 0);
     assertEquals(2, e.end);
-    assertArrayEquals(new String[] {" a", "  b"}, e.subtext);
+    assertEquals(List.of(" a", "  b"), e.subtext);
 
-    var in =
-        new String[] {
-          "a",
-        };
-    var out =
-        new String[] {
-          "a",
-        };
-    e = new Element(Arrays.asList(in), 0, 0);
-    assertArrayEquals(out, e.subtext);
-    assertEquals(out.length, e.end);
+    var in = List.of("a");
+    var out = List.of("a");
+    e = new Element(in, 0, 0);
+    assertEquals(out, e.subtext);
+    assertEquals(out.size(), e.end);
 
-    in =
-        new String[] {
-          "@a", "a", "b",
-        };
-    out =
-        new String[] {
-          "@a", "a",
-        };
-    e = new Element(Arrays.asList(in), 0, 0);
-    assertArrayEquals(out, e.subtext);
-    assertEquals(out.length, e.end);
+    in = List.of("@a", "a", "b");
+    out = List.of("@a", "a");
+    e = new Element(in, 0, 0);
+    assertEquals(out, e.subtext);
+    assertEquals(out.size(), e.end);
   }
 
   @Test

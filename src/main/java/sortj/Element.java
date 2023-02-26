@@ -1,7 +1,6 @@
 package sortj;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -21,11 +20,8 @@ public final class Element {
   final int end;
 
   // the portion of the text that comprises this element.
-  // an array rather than a list, to make sure we don't end up
-  // with just a view on the original list, which would be invalid
-  // as soon as the text starts being rearranged.
   // if subtext is null, there wasn't another element to read
-  final String[] subtext;
+  final List<String> subtext;
 
   // cache
   private String key;
@@ -33,7 +29,7 @@ public final class Element {
   String key() {
     if (key != null) return key;
     for (var i = 0; ; i++) {
-      var s = subtext[i];
+      var s = subtext.get(i);
       s = s.strip();
       if (s.startsWith("//") || s.startsWith("@")) continue;
       for (var p : PATTERNS) {
@@ -92,13 +88,12 @@ public final class Element {
     while (text.get(j - 1).isBlank()) j--;
 
     // element text
-    subtext = new String[j - i];
-    for (var k = 0; k < subtext.length; k++) subtext[k] = text.get(i + k);
+    subtext = text.subList(i, j);
   }
 
   static List<String> cat(List<Element> elements) {
     var v = new ArrayList<String>();
-    for (var e : elements) Collections.addAll(v, e.subtext);
+    for (var e : elements) v.addAll(e.subtext);
     return v;
   }
 }
